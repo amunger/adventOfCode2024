@@ -1,0 +1,27 @@
+{
+  "name": "typescript-workspace",
+  "version": "1.0.0",
+  "description": "A TypeScript workspace for solving small coding interview-style problems.",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/day3.js",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/typescript-workspace.git"
+  },
+  "keywords": [
+    "typescript",
+    "coding",
+    "interview",
+    "problems"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "typescript": "^4.9.5"
+  }
+}
