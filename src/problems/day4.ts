@@ -7,7 +7,7 @@ function processLine(line: string) {
     lines.push(line);
 }
 
-const directions = [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]];
+const directions = [[1, 1], [1, -1], [-1, -1], [-1, 1]];
 
 function checkDirection(row: number, column: number, direction: number[], word: string) {
     if (word === '') {
@@ -23,9 +23,26 @@ function checkDirection(row: number, column: number, direction: number[], word: 
 let foundCount = 0;
 
 function findWord(row: number, column: number) {
-    for (const direction of directions) {
-        if (checkDirection(row, column, direction, 'XMAS')) {
-            foundCount++;
+    if (lines[row].charAt(column) === 'A') {
+        for (const direction of directions) {
+            const sRow = row + direction[0] * -1;
+            const sColumn = column + direction[1] * -1;
+            if (checkDirection(sRow, sColumn, direction, 'MAS')) {
+                let cross = [direction[0] * -1, direction[1]];
+                let cRow = row + cross[0] * -1;
+                let cColumn = column + cross[1] * -1;
+                if (checkDirection(cRow, cColumn, cross, 'MAS')) {
+                    foundCount++;
+                    break;
+                }
+                cross = [direction[0], direction[1] * -1];
+                cRow = row + cross[0] * -1;
+                cColumn = column + cross[1] * -1;
+                if (checkDirection(cRow, cColumn, cross, 'MAS')) {
+                    foundCount++;
+                    break;
+                }
+            }
         }
     }
 }
