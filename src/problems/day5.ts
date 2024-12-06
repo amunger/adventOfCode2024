@@ -44,15 +44,50 @@ function getMiddle(update: string[]) {
     return parseInt(update[midIx]);
 }
 
+function fixUpdate(update: string[]) {
+    let fixed = [...update];
+    let adjusted = true;
+
+    while (adjusted) {
+        adjusted = false;
+        const seen = new Map<string, number>();
+        for (let i = 0; i < fixed.length; i++) {
+            const others = rules.get(fixed[i]);
+            if (others) {
+                for (const other of others) {
+                    if (seen.has(other)) {
+                        const otherIx = seen.get(other) as number;
+                        const temp = fixed[otherIx];
+                        fixed[otherIx] = fixed[i];
+                        fixed[i] = temp;
+                        adjusted = true;
+                        break;
+                    }
+                }
+            }
+            seen.set(fixed[i], i);
+        }
+    }
+
+    return fixed;
+}
+
 let result = 0;
+const bad: string[][] = [];
 
 async function doIt() {
     await processFile('./input/day5.txt', processLine);
 
     for (const update of updates) {
-        if (checkUpdate(update)) {
-            result += getMiddle(update);
+        if (!checkUpdate(update)) {
+            bad.push(update);
         }
+    }
+
+    for (const update of bad) {
+        const fixed = fixUpdate(update);
+        result += getMiddle(fixed);
+        console.log(`${update} -> ${fixed}`);
     }
 
     console.log(result);
