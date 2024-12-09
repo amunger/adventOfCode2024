@@ -1,3 +1,4 @@
+import { get } from "http";
 import { processFile } from "../utils/helper";
 
 type node = {
@@ -46,6 +47,28 @@ function getNode(location: number[]) {
     return nodeMap[location[0]][location[1]];
 }
 
+function findInLine(start: number[], vector: number[]) {
+    let location = start;
+    while (getNode(location)) {
+        const node = getNode(location);
+        if (node && !node.antiNode) {
+            node.antiNode = true;
+            antiNodeCount++;
+        }
+        location = addVector(location, vector);
+    }
+    const reverse = invertVector(vector);
+    location = addVector(start, reverse);
+    while (getNode(location)) {
+        const node = getNode(location);
+        if (node && !node.antiNode) {
+            node.antiNode = true;
+            antiNodeCount++;
+        }
+        location = addVector(location, reverse);
+    }
+}
+
 function findAntiNodes(row: number, col: number) {
     const node = getNode([row, col]);
     if (node && node.ant) {
@@ -53,20 +76,7 @@ function findAntiNodes(row: number, col: number) {
         if (others) {
             for (const other of others) {
                 const vector = getVector([row, col], other);
-                const antiLocation = addVector([other[0], other[1]], vector);
-                const antiNode = getNode(antiLocation);
-                if (antiNode && !antiNode.ant) {
-                    antiNode.antiNode = true;
-                    antiNodeCount++;
-                }
-
-                const antiVector = invertVector(vector);
-                const antiLocation2 = addVector([row, col], antiVector);
-                const antiNode2 = getNode(antiLocation2);
-                if (antiNode2 && !antiNode2.ant) {
-                    antiNode2.antiNode = true;
-                    antiNodeCount++;
-                }
+                findInLine([row, col], vector);
             }
         }
 
