@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const helper_1 = require("../utils/helper");
 const nodes = [];
@@ -59,44 +68,47 @@ function redirectWillLoop() {
     }
     return false;
 }
-async function doIt() {
-    await (0, helper_1.processFile)('./input/day6.txt', processLine);
-    let count = 0;
-    while (true) {
-        const next = nextPosition(position, direction);
-        const nextNode = getNode(next);
-        if (!nextNode) {
-            break;
-        }
-        if (!nextNode.block && !nextNode.added
-            && !(next[0] === start[0] && next[1] === start[1])) {
-            nextNode.block = true;
-            if (redirectWillLoop()) {
-                count++;
-                nextNode.added = true;
+function doIt() {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield (0, helper_1.processFile)('./input/day6.txt', processLine);
+        let count = 0;
+        while (true) {
+            const next = nextPosition(position, direction);
+            const nextNode = getNode(next);
+            if (!nextNode) {
+                break;
+            }
+            if (!nextNode.block && !nextNode.added
+                && !(next[0] === start[0] && next[1] === start[1])) {
+                nextNode.block = true;
+                if (redirectWillLoop()) {
+                    count++;
+                    nextNode.added = true;
+                }
+                else {
+                    nextNode.tried = true;
+                }
+                nextNode.block = false;
+            }
+            getNode(position).visited = direction;
+            if (nextNode.block) {
+                direction = turnRight(direction);
             }
             else {
-                nextNode.tried = true;
+                position = next;
             }
-            nextNode.block = false;
         }
-        getNode(position).visited = direction;
-        if (nextNode.block) {
-            direction = turnRight(direction);
-        }
-        else {
-            position = next;
-        }
-    }
-    nodes.forEach(row => {
-        console.log(row.map(node => node.added ? 'O'
-            : node.block ? '#'
-                : node.tried ? 'x'
-                    : node.visited ? 'X'
-                        : '.').join(''));
+        nodes.forEach(row => {
+            console.log(row.map(node => node.added ? 'O'
+                : node.block ? '#'
+                    : node.tried ? 'x'
+                        : node.visited ? 'X'
+                            : '.').join(''));
+        });
+        console.log(count);
     });
-    console.log(count);
 }
 doIt();
 //1599 too high
 // 1516
+//# sourceMappingURL=day6.js.map

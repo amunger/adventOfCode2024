@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const helper_1 = require("../utils/helper");
 function processLine(line) {
@@ -22,8 +31,9 @@ function invertVector(vector) {
     return [-vector[0], -vector[1]];
 }
 function addAntLocation(ant, location) {
+    var _a;
     if (antLocations.has(ant)) {
-        antLocations.get(ant)?.push(location);
+        (_a = antLocations.get(ant)) === null || _a === void 0 ? void 0 : _a.push(location);
     }
     else {
         antLocations.set(ant, [location]);
@@ -76,18 +86,21 @@ function processNodes() {
         }
     }
 }
-async function doIt() {
-    await (0, helper_1.processFile)('./input/day8.txt', processLine);
-    processNodes();
-    for (let i = 0; i < nodeMap.length; i++) {
-        let row = '';
-        for (let j = 0; j < nodeMap[i].length; j++) {
-            const node = nodeMap[i][j];
-            row += node.ant ? node.ant : node.antiNode ? '#' : '.';
+function doIt() {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield (0, helper_1.processFile)('./input/day8.txt', processLine);
+        processNodes();
+        for (let i = 0; i < nodeMap.length; i++) {
+            let row = '';
+            for (let j = 0; j < nodeMap[i].length; j++) {
+                const node = nodeMap[i][j];
+                row += node.ant ? node.ant : node.antiNode ? '#' : '.';
+            }
+            console.log(row);
         }
-        console.log(row);
-    }
-    console.log(antiNodeCount);
+        console.log(antiNodeCount);
+    });
 }
 doIt();
 // 363 too low
+//# sourceMappingURL=day8.js.map

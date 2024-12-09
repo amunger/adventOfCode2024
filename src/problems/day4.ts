@@ -9,7 +9,7 @@ function processLine(line: string) {
 
 const directions = [[1, 1], [1, -1], [-1, -1], [-1, 1]];
 
-function checkDirection(row: number, column: number, direction: number[], word: string) {
+function checkDirection(row: number, column: number, direction: number[], word: string): boolean {
     if (word === '') {
         return true;
     }
