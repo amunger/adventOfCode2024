@@ -6,7 +6,7 @@
             "request": "launch",
             "name": "Debug TypeScript",
             "preLaunchTask": "tsc: build - tsconfig.json",
-            "program": "${workspaceFolder}/dist/problems/day10.js",
+            "program": "${workspaceFolder}/dist/problems/day11.js",
             "outFiles": ["${workspaceFolder}/dist/**/*.js"],
             "sourceMaps": true
         }
