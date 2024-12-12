@@ -66,7 +66,17 @@ function getSides(regionId: string) {
     let result = 0;
     for (let plot of plots) {
         const location = plot.location;
-        
+        for(let dirIx = 0; dirIx < 4; dirIx++){
+            const direction = directions[dirIx];
+            const turn = directions[(dirIx + 1) % 4];
+            const turnStep = step(location[0], location[1], turn);
+            if (labelAt(step(location[0], location[1], direction)) !== plot.label) {
+                if (labelAt(turnStep) !== plot.label
+                    || labelAt(step(turnStep[0], turnStep[1], direction)) === plot.label){
+                        result++;
+                    }
+            }
+        }
     }
     return result;
 }
@@ -95,8 +105,9 @@ async function doIt() {
     for (let regionId in regions) {
         const area = getArea(regionId);
         const permiter = getPermiter(regionId);
-        price += area * permiter;
-        //console.log(`Region ${regionId} has area ${area} and permiter ${permiter}`);
+        const sides = getSides(regionId);
+        price += area * sides;
+        console.log(`Region ${regionId} has area ${area} and sides ${sides}`);
     }
 
     console.log(`Total price is ${price}`);
